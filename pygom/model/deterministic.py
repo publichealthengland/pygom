@@ -980,6 +980,7 @@ class DeterministicOde(BaseOdeModel):
         -----
         Name and order of state and time are also different.
 
+
         See Also
         --------
         :meth:`.grad_jacobian`, :meth:`.get_grad_jacobian_eqn`
@@ -2239,7 +2240,7 @@ class DeterministicOde(BaseOdeModel):
       
       # predict step         
              xnew =self.integrate(t[i+1])
-            
+             
      # update step
              xfilter,Pnew,KG = self.Kalman_Filter(observations[i],observed_states,model,xnew[-1],P,t[i+1],t[i+1]-t[i],sigmaw2,sigmar2,beta_state,Bounds) 
              #xfilter = xnew[-1]
@@ -2259,6 +2260,7 @@ class DeterministicOde(BaseOdeModel):
        from numpy.linalg import inv
        from numpy import dot
        import numpy as np
+       print("Using Pygom version")
        # beta_state allows the user to specify one state which can never go negative
        # Bounds is a list of upper and lower bounds for each variable
        # So assume that only one of these can be presented:
@@ -2295,7 +2297,7 @@ class DeterministicOde(BaseOdeModel):
            for i in range(m_states):
              Z[i,0]=z[i]
        
-       Y=z   
+       Y=Z 
        F = self.jacobian(state=x,t=time)
     #  jacobian retutned by Pygom idn't quite what we want - so make the
     #  modifcation below
@@ -2350,7 +2352,13 @@ class DeterministicOde(BaseOdeModel):
        if not beta_state is None:
           X[beta_state,0] =max(X[beta_state,0],0)
        Xlist=[]
-       if (Bounds is not None):
+# temp -hard code a zero lower limt
+       ZeroLimit =True
+       if ZeroLimit:
+          Bounds =[]
+          for i in range(n_states):
+               Bounds.append([0.0,None])
+       if (Bounds is not None ):
              for i in range(n_states):
                    if Bounds[i][0] is not None or Bounds[i][1] is not None:
                        if Bounds[i][1] is None:
@@ -2373,5 +2381,8 @@ class DeterministicOde(BaseOdeModel):
       # print('K',K)
        P = P - dot(dot(K,H),P)
        # return Kalman gain for testing
+      # print(Xlist,P,dot(K,(Y-IM)))
+      # print(x)
+      # print(z)
        return (Xlist,P,dot(K,(Y-IM)))
         
