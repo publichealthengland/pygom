@@ -2296,6 +2296,7 @@ class DeterministicOde(BaseOdeModel):
        else:
            for i in range(m_states):
              Z[i,0]=z[i]
+#dcm correction
        
        Y=Z 
        F = self.jacobian(state=x,t=time)
