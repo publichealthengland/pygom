@@ -1,4 +1,4 @@
-name: create PyGOM distributions
+name: Test PyGOM distributions
 
 on:
   push:

@@ -133,8 +133,8 @@ jobs:
           # seems not working - I think this because you need _annotated_ tags
           # for git describe i.e. you need to tag the release as so:
           # 'git tag vX.Y.Z -a -m "YOUR MESSAGE HERE"'
-          # echo "VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-          echo "VERSION=${git describe}" >> $GITHUB_ENV
+          echo "VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+          # echo "VERSION=${git describe}" >> $GITHUB_ENV
 
       # setuptools_scm workaround for https://github.com/pypa/setuptools_scm/issues/455
       - name: Disable local version identifier on develop CI
